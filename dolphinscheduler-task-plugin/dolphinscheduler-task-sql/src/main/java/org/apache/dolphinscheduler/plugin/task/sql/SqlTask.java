@@ -98,7 +98,9 @@ public class SqlTask extends AbstractTask {
 
     public static final int TEST_FLAG_YES = 1;
 
-    private static final String SQL_SEPARATOR = ";\n";
+    private static final String SQL_SEPARATOR = ";";
+
+    private static final String LINE_SEPARATOR = "\n";
 
     /**
      * Abstract Yarn Task
@@ -200,13 +202,21 @@ public class SqlTask extends AbstractTask {
             return Collections.singletonList(sql);
         }
 
-        String[] lines = sql.split(segmentSeparator);
+        String[] lines = sql.split(LINE_SEPARATOR);
         List<String> segments = new ArrayList<>();
+        StringBuilder stmt = new StringBuilder();
         for (String line : lines) {
             if (line.trim().isEmpty() || line.startsWith("--")) {
                 continue;
             }
-            segments.add(line);
+            stmt.append(LINE_SEPARATOR).append(line);
+            if (line.trim().endsWith(segmentSeparator)) {
+                segments.add(stmt.toString());
+                stmt.setLength(0);
+            }
+        }
+        if (stmt.length() > 0) {
+            segments.add(stmt.toString());
         }
         return segments;
     }
