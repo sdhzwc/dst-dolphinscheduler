@@ -50,6 +50,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 /**
  * <p>
  *     https://open.dingtalk.com/document/robots/custom-robot-access
@@ -256,7 +259,7 @@ public final class DingTalkSender {
      * @param text text
      */
     private void generateMarkdownMsg(String title, String content, Map<String, Object> text) {
-        StringBuilder builder = new StringBuilder(content);
+        StringBuilder builder = new StringBuilder(getMarkDownContent(content));
         if (org.apache.commons.lang3.StringUtils.isNotBlank(keyword)) {
             builder.append(" ");
             builder.append(keyword);
@@ -281,6 +284,58 @@ public final class DingTalkSender {
         String txt = StringUtils.newStringUtf8(byt);
         text.put("title", title);
         text.put("text", txt);
+    }
+
+    public String getMarkDownContent(String content) {
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(content)) {
+            StringBuilder contentBuilder = new StringBuilder();
+            contentBuilder.append("## **[DolphinScheduler Job]**\n");
+            ArrayNode jsonNodes = JSONUtils.parseArray(content);
+            for (JsonNode jsonNode : jsonNodes) {
+                contentBuilder.append(">projectCode   : <font color=#0000ff>")
+                        .append(jsonNode.get("projectCode"))
+                        .append("</font>  \n")
+                        .append("projectName   : ").append(jsonNodeConvertStr(jsonNode.get("projectName")))
+                        .append("  \n")
+                        .append("owner : **<font color=#27302f>").append(jsonNodeConvertStr(jsonNode.get("owner")))
+                        .append("</font>**  \n")
+                        .append("processId   : ").append(jsonNode.get("processId")).append("  \n")
+                        .append("processDefinitionCode   : <font color=#0000ff>")
+                        .append(jsonNode.get("processDefinitionCode")).append("</font>  \n")
+                        .append("processName   : ").append(jsonNodeConvertStr(jsonNode.get("processName")))
+                        .append(" \n")
+                        .append("modifyBy   : **<font color=#27302f>")
+                        .append(jsonNodeConvertStr(jsonNode.get("modifyBy")))
+                        .append("</font>**  \n")
+                        .append("taskCode   : <font color=#0000ff>")
+                        .append(jsonNode.get("taskCode"))
+                        .append("</font>  \n")
+                        .append("taskName   : ").append(jsonNodeConvertStr(jsonNode.get("taskName"))).append("  \n")
+                        .append("taskState   : <font color=#ff0000>")
+                        .append(jsonNodeConvertStr(jsonNode.get("taskState")))
+                        .append("</font>  \n")
+                        .append("taskStartTime   : ").append(jsonNodeConvertStr(jsonNode.get("taskStartTime")))
+                        .append("  \n")
+                        .append("taskEndTime   : ").append(jsonNodeConvertStr(jsonNode.get("taskEndTime")))
+                        .append("  \n")
+                        .append("taskHost   : ").append(jsonNodeConvertStr(jsonNode.get("taskHost"))).append("  \n")
+                        .append("taskPriority   : ").append(jsonNodeConvertStr(jsonNode.get("taskPriority")))
+                        .append("  \n")
+                        .append("logPath   : <font color=#ff0000>").append(jsonNodeConvertStr(jsonNode.get("logPath")))
+                        .append("</font>  \n");
+            }
+            return contentBuilder.toString();
+        } else {
+            return content;
+        }
+    }
+
+    public String jsonNodeConvertStr(JsonNode jsonNode) {
+        if (jsonNode == null) {
+            return null;
+        } else {
+            return jsonNode.textValue();
+        }
     }
 
     /**
