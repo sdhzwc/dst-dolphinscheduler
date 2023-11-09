@@ -149,9 +149,6 @@ public class SqlTask extends AbstractTask {
             baseConnectionParam = (BaseConnectionParam) DataSourceUtils.buildConnectionParams(
                     DbType.valueOf(sqlParameters.getType()),
                     sqlTaskExecutionContext.getConnectionParams());
-            if (DbType.valueOf(sqlParameters.getType()).isSupportMultipleStatement()) {
-                separator = "";
-            }
             // ready to execute SQL and parameter entity Map
             List<SqlBinds> mainStatementSqlBinds = split(sqlParameters.getSql(), separator)
                     .stream()
