@@ -23,6 +23,7 @@ import org.apache.dolphinscheduler.common.utils.NetUtils;
 import org.apache.dolphinscheduler.dao.entity.ProcessInstance;
 import org.apache.dolphinscheduler.dao.entity.TaskInstance;
 import org.apache.dolphinscheduler.plugin.task.api.enums.TaskExecutionStatus;
+import org.apache.dolphinscheduler.plugin.task.api.parameters.AbstractParameters;
 import org.apache.dolphinscheduler.plugin.task.api.utils.LogUtils;
 import org.apache.dolphinscheduler.remote.command.workflow.WorkflowStateEventChangeRequest;
 import org.apache.dolphinscheduler.remote.processor.StateEventCallbackService;
@@ -33,6 +34,7 @@ import org.apache.dolphinscheduler.server.master.event.StateEvent;
 import org.apache.dolphinscheduler.server.master.event.TaskStateEvent;
 import org.apache.dolphinscheduler.server.master.runner.execute.MasterTaskExecuteRunnable;
 import org.apache.dolphinscheduler.server.master.runner.execute.MasterTaskExecuteRunnableHolder;
+import org.apache.dolphinscheduler.server.master.runner.task.ILogicTask;
 import org.apache.dolphinscheduler.service.process.ProcessService;
 
 import java.util.Map;
@@ -189,8 +191,17 @@ public class WorkflowExecuteThreadPool extends ThreadPoolTaskExecutor {
         try {
             MasterTaskExecuteRunnable masterTaskExecuteRunnable =
                     MasterTaskExecuteRunnableHolder.getMasterTaskExecuteRunnable(taskInstance.getId());
-            masterTaskExecuteRunnable.getILogicTask().getTaskParameters()
-                    .setVarPool(finishProcessInstance.getVarPool());
+            ILogicTask iLogicTask = null;
+            if (masterTaskExecuteRunnable != null) {
+                iLogicTask = masterTaskExecuteRunnable.getILogicTask();
+            }
+            AbstractParameters taskParameters = null;
+            if (iLogicTask != null) {
+                taskParameters = iLogicTask.getTaskParameters();
+            }
+            if (taskParameters != null) {
+                taskParameters.setVarPool(finishProcessInstance.getVarPool());
+            }
             log.info("Cross workflow parameter passing success, finishProcessInstanceId: {}, taskInstanceId: {}",
                     finishProcessInstance.getId(), taskInstance.getId());
         } catch (Exception ex) {
