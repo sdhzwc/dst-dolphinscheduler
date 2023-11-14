@@ -292,8 +292,12 @@ public final class DingTalkSender {
             contentBuilder.append("## **[DolphinScheduler Job]**\n");
             ArrayNode jsonNodes = JSONUtils.parseArray(content);
             for (JsonNode jsonNode : jsonNodes) {
+                JsonNode projectCode = jsonNode.get("projectCode");
+                if (projectCode == null) {
+                    return content;
+                }
                 contentBuilder.append(">projectCode   : <font color=#0000ff>")
-                        .append(jsonNode.get("projectCode"))
+                        .append(projectCode)
                         .append("</font>  \n")
                         .append("projectName   : ").append(jsonNodeConvertStr(jsonNode.get("projectName")))
                         .append("  \n")
