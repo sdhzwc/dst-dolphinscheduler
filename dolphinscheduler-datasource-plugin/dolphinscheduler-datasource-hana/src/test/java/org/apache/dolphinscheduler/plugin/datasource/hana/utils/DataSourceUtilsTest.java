@@ -27,17 +27,19 @@ import org.apache.dolphinscheduler.plugin.datasource.hana.param.HanaConnectionPa
 import org.apache.dolphinscheduler.plugin.datasource.hana.param.HanaDataSourceParamDTO;
 import org.apache.dolphinscheduler.spi.datasource.ConnectionParam;
 import org.apache.dolphinscheduler.spi.enums.DbType;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @ExtendWith(MockitoExtension.class)
 public class DataSourceUtilsTest {
@@ -88,22 +90,20 @@ public class DataSourceUtilsTest {
     }
 
     @Test
-    public void testGetConnection() throws ExecutionException {
+    public void testGetConnection() throws ExecutionException, SQLException {
         try (
                 MockedStatic<PropertyUtils> mockedStaticPropertyUtils = Mockito.mockStatic(PropertyUtils.class);
                 MockedStatic<DataSourceClientProvider> mockedStaticDataSourceClientProvider =
                         Mockito.mockStatic(DataSourceClientProvider.class)) {
-            mockedStaticPropertyUtils.when(() -> PropertyUtils.getLong("kerberos.expire.time", 24L)).thenReturn(24L);
-            DataSourceClientProvider clientProvider = Mockito.mock(DataSourceClientProvider.class);
-            mockedStaticDataSourceClientProvider.when(DataSourceClientProvider::getInstance).thenReturn(clientProvider);
 
             Connection connection = Mockito.mock(Connection.class);
-            Mockito.when(clientProvider.getConnection(Mockito.any(), Mockito.any())).thenReturn(connection);
+            Mockito.when(DataSourceClientProvider.getAdHocConnection(Mockito.any(), Mockito.any()))
+                    .thenReturn(connection);
 
             HanaConnectionParam connectionParam = new HanaConnectionParam();
             connectionParam.setUser("root");
             connectionParam.setPassword("123456");
-            connection = DataSourceClientProvider.getInstance().getConnection(DbType.HANA, connectionParam);
+            connection = DataSourceClientProvider.getAdHocConnection(DbType.HANA, connectionParam);
 
             Assertions.assertNotNull(connection);
         }

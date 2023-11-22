@@ -17,17 +17,13 @@
 
 package org.apache.dolphinscheduler.plugin.datasource.hana;
 
-import org.apache.dolphinscheduler.spi.datasource.DataSourceChannel;
+import org.apache.dolphinscheduler.plugin.datasource.api.client.BaseAdHocDataSourceClient;
+import org.apache.dolphinscheduler.spi.datasource.BaseConnectionParam;
+import org.apache.dolphinscheduler.spi.enums.DbType;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+public class HanaAdHocDataSourceClient extends BaseAdHocDataSourceClient {
 
-public class HanaDataSourceChannelFactoryTest {
-
-    @Test
-    public void testCreate() {
-        HanaDataSourceChannelFactory sourceChannelFactory = new HanaDataSourceChannelFactory();
-        DataSourceChannel dataSourceChannel = sourceChannelFactory.create();
-        Assertions.assertNotNull(dataSourceChannel);
+    public HanaAdHocDataSourceClient(BaseConnectionParam baseConnectionParam, DbType dbType) {
+        super(baseConnectionParam, dbType);
     }
 }

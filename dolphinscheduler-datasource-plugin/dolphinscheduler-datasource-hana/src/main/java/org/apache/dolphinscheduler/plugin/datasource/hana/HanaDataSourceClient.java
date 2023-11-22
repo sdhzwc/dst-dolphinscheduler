@@ -17,11 +17,11 @@
 
 package org.apache.dolphinscheduler.plugin.datasource.hana;
 
-import org.apache.dolphinscheduler.plugin.datasource.api.client.CommonDataSourceClient;
+import org.apache.dolphinscheduler.plugin.datasource.api.client.BasePooledDataSourceClient;
 import org.apache.dolphinscheduler.spi.datasource.BaseConnectionParam;
 import org.apache.dolphinscheduler.spi.enums.DbType;
 
-public class HanaDataSourceClient extends CommonDataSourceClient {
+public class HanaDataSourceClient extends BasePooledDataSourceClient {
 
     public HanaDataSourceClient(BaseConnectionParam baseConnectionParam, DbType dbType) {
         super(baseConnectionParam, dbType);
