@@ -430,6 +430,7 @@ public enum Status {
     HDFS_NOT_STARTUP(60001, "hdfs not startup", "hdfs未启用"),
     STORAGE_NOT_STARTUP(60002, "storage not startup", "存储未启用"),
     S3_CANNOT_RENAME(60003, "directory cannot be renamed", "S3无法重命名文件夹"),
+    OSS_CANNOT_RENAME(60004, "directory cannot be renamed", "OSS无法重命名文件夹"),
     /**
      * for monitor
      */

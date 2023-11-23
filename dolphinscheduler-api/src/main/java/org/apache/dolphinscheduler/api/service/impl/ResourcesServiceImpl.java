@@ -368,6 +368,12 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements ResourcesSe
             putMsg(result, Status.S3_CANNOT_RENAME);
             return result;
         }
+        if (resource.isDirectory() && storageOperate.returnStorageType().equals(ResUploadType.OSS)
+                && !resource.getFileName().equals(name)) {
+            log.warn("Directory in OSS storage can not be renamed.");
+            putMsg(result, Status.OSS_CANNOT_RENAME);
+            return result;
+        }
 
         // check if updated name of the resource already exists
         String originFullName = resource.getFullName();
