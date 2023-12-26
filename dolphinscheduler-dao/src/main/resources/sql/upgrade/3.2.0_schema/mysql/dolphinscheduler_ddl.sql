@@ -547,3 +547,5 @@ CREATE TABLE if not exists `t_ds_project_parameter` (
     UNIQUE KEY `unique_project_parameter_name`(`project_code`, `param_name`),
     UNIQUE KEY `unique_project_parameter_code`(`code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE = utf8_bin;
+
+ALTER TABLE t_ds_project_parameter ADD  `param_data_type` enum('VARCHAR','INTEGER','LONG','FLOAT','DOUBLE','DATE','TIME','TIMESTAMP','BOOLEAN','LIST','FILE') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'VARCHAR' COMMENT 'project parameter data type';

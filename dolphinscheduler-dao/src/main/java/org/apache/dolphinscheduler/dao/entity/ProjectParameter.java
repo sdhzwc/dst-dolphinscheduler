@@ -17,6 +17,8 @@
 
 package org.apache.dolphinscheduler.dao.entity;
 
+import org.apache.dolphinscheduler.plugin.task.api.enums.DataType;
+
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -52,6 +54,9 @@ public class ProjectParameter {
 
     @TableField("param_value")
     private String paramValue;
+
+    @TableField("param_data_type")
+    private DataType paramDataType;
 
     private Date createTime;
 
