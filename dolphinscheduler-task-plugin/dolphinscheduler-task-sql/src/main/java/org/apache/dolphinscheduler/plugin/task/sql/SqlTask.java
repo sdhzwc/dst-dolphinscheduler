@@ -203,7 +203,7 @@ public class SqlTask extends AbstractTask {
         List<String> segments = new ArrayList<>();
         StringBuilder stmt = new StringBuilder();
         for (String line : lines) {
-            if (line.trim().isEmpty() || line.startsWith("--")) {
+            if (line.trim().isEmpty() || line.trim().startsWith("--")) {
                 continue;
             }
             stmt.append(LINE_SEPARATOR).append(line);
