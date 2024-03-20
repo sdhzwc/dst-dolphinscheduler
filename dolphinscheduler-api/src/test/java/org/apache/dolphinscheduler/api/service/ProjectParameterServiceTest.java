@@ -27,6 +27,7 @@ import org.apache.dolphinscheduler.dao.entity.ProjectParameter;
 import org.apache.dolphinscheduler.dao.entity.User;
 import org.apache.dolphinscheduler.dao.mapper.ProjectMapper;
 import org.apache.dolphinscheduler.dao.mapper.ProjectParameterMapper;
+import org.apache.dolphinscheduler.plugin.task.api.enums.DataType;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -65,13 +66,15 @@ public class ProjectParameterServiceTest {
         Mockito.when(projectParameterMapper.selectOne(Mockito.any())).thenReturn(getProjectParameter());
         Mockito.when(projectService.hasProjectAndWritePerm(Mockito.any(), Mockito.any(), Mockito.any(Result.class)))
                 .thenReturn(true);
-        Result result = projectParameterService.createProjectParameter(loginUser, projectCode, "key", "value");
+        Result result = projectParameterService.createProjectParameter(loginUser, projectCode, "key", "value",
+                DataType.VARCHAR.name());
         Assertions.assertEquals(Status.PROJECT_PARAMETER_ALREADY_EXISTS.getCode(), result.getCode());
 
         // SUCCESS
         Mockito.when(projectParameterMapper.selectOne(Mockito.any())).thenReturn(null);
         Mockito.when(projectParameterMapper.insert(Mockito.any())).thenReturn(1);
-        result = projectParameterService.createProjectParameter(loginUser, projectCode, "key1", "value");
+        result = projectParameterService.createProjectParameter(loginUser, projectCode, "key1", "value",
+                DataType.VARCHAR.name());
         Assertions.assertEquals(Status.SUCCESS.getCode(), result.getCode());
     }
 
@@ -84,19 +87,22 @@ public class ProjectParameterServiceTest {
         Mockito.when(projectService.hasProjectAndWritePerm(Mockito.any(), Mockito.any(), Mockito.any(Result.class)))
                 .thenReturn(true);
         Mockito.when(projectParameterMapper.queryByCode(Mockito.anyLong())).thenReturn(null);
-        Result result = projectParameterService.updateProjectParameter(loginUser, projectCode, 1, "key", "value");
+        Result result = projectParameterService.updateProjectParameter(loginUser, projectCode, 1, "key", "value",
+                DataType.VARCHAR.name());
         Assertions.assertEquals(Status.PROJECT_PARAMETER_NOT_EXISTS.getCode(), result.getCode());
 
         // PROJECT_PARAMETER_ALREADY_EXISTS
         Mockito.when(projectParameterMapper.queryByCode(Mockito.anyLong())).thenReturn(getProjectParameter());
         Mockito.when(projectParameterMapper.selectOne(Mockito.any())).thenReturn(getProjectParameter());
-        result = projectParameterService.updateProjectParameter(loginUser, projectCode, 1, "key", "value");
+        result = projectParameterService.updateProjectParameter(loginUser, projectCode, 1, "key", "value",
+                DataType.VARCHAR.name());
         Assertions.assertEquals(Status.PROJECT_PARAMETER_ALREADY_EXISTS.getCode(), result.getCode());
 
         // SUCCESS
         Mockito.when(projectParameterMapper.selectOne(Mockito.any())).thenReturn(null);
         Mockito.when(projectParameterMapper.updateById(Mockito.any())).thenReturn(1);
-        result = projectParameterService.updateProjectParameter(loginUser, projectCode, 1, "key1", "value");
+        result = projectParameterService.updateProjectParameter(loginUser, projectCode, 1, "key1", "value",
+                DataType.VARCHAR.name());
         Assertions.assertEquals(Status.SUCCESS.getCode(), result.getCode());
     }
 

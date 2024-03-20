@@ -38,6 +38,7 @@ import org.apache.dolphinscheduler.dao.entity.ProcessInstance;
 import org.apache.dolphinscheduler.dao.entity.ProjectParameter;
 import org.apache.dolphinscheduler.dao.entity.TaskInstance;
 import org.apache.dolphinscheduler.dao.mapper.ProjectParameterMapper;
+import org.apache.dolphinscheduler.plugin.task.api.enums.DataType;
 import org.apache.dolphinscheduler.plugin.task.api.enums.Direct;
 import org.apache.dolphinscheduler.plugin.task.api.model.Property;
 import org.apache.dolphinscheduler.plugin.task.api.parameters.AbstractParameters;
@@ -297,7 +298,7 @@ public class CuringParamsServiceImpl implements CuringParamsService {
         projectParameterList.forEach(projectParameter -> {
             Property property = new Property(projectParameter.getParamName(),
                     Direct.IN,
-                    projectParameter.getParamDataType(),
+                    Enum.valueOf(DataType.class, projectParameter.getParamDataType().toUpperCase()),
                     projectParameter.getParamValue());
             result.put(projectParameter.getParamName(), property);
         });

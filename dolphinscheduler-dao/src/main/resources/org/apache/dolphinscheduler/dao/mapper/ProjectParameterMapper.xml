@@ -65,6 +65,9 @@
             OR param_value LIKE concat('%', #{searchName}, '%')
             )
         </if>
+        <if test="paramDataType!=null and paramDataType != ''">
+            AND param_data_type = #{paramDataType}
+        </if>
         order by update_time desc
     </select>
 

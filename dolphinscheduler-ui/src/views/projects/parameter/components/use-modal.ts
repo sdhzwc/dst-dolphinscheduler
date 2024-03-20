@@ -41,7 +41,8 @@ export function useModal(
     model: {
       code: ref<number>(-1),
       projectParameterName: ref(''),
-      projectParameterValue: ref('')
+      projectParameterValue: ref(''),
+      projectParameterDataType: ref('VARCHAR')
     },
     saving: false,
     rules: {
@@ -60,6 +61,15 @@ export function useModal(
         validator() {
           if (variables.model.projectParameterValue === '') {
             return new Error(t('project.parameter.value_tips'))
+          }
+        }
+      },
+      data_type: {
+        required: true,
+        trigger: ['input', 'blur'],
+        validator() {
+          if (variables.model.projectParameterDataType === '') {
+            return new Error(t('project.parameter.data_type_tips'))
           }
         }
       }
@@ -83,12 +93,14 @@ export function useModal(
   const submitModal = () => {
     const data: ProjectParameterReq = {
       projectParameterName: variables.model.projectParameterName,
-      projectParameterValue: variables.model.projectParameterValue
+      projectParameterValue: variables.model.projectParameterValue,
+      projectParameterDataType: variables.model.projectParameterDataType
     }
 
     createProjectParameter(data, variables.projectCode).then(() => {
       variables.model.projectParameterName = ''
       variables.model.projectParameterValue = ''
+      variables.model.projectParameterDataType = 'VARCHAR'
       ctx.emit('confirmModal', props.showModalRef)
     })
   }
@@ -97,7 +109,8 @@ export function useModal(
     const data: UpdateProjectParameterReq = {
       code: variables.model.code,
       projectParameterName: variables.model.projectParameterName,
-      projectParameterValue: variables.model.projectParameterValue
+      projectParameterValue: variables.model.projectParameterValue,
+      projectParameterDataType: variables.model.projectParameterDataType
     }
 
     updateProjectParameter(data, variables.projectCode).then(() => {
