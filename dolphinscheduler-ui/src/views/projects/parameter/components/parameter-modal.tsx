@@ -26,7 +26,7 @@ import Modal from '@/components/modal'
 import {NForm, NFormItem, NInput, NSelect} from 'naive-ui'
 import { useModal } from './use-modal'
 import { useI18n } from 'vue-i18n'
-import {DATA_TYPES_MAP} from "@/views/projects/parameter/data_type";
+import {DATA_TYPES_MAP, DEFAULT_DATA_TYPE} from "@/views/projects/parameter/data_type";
 
 const ParameterModal = defineComponent({
   name: 'ParameterModal',
@@ -53,7 +53,7 @@ const ParameterModal = defineComponent({
       if (props.statusRef === 0) {
         variables.model.projectParameterName = ''
         variables.model.projectParameterValue = ''
-        variables.model.projectParameterDataType = 'VARCHAR'
+        variables.model.projectParameterDataType = DEFAULT_DATA_TYPE
       } else {
         variables.model.projectParameterName = props.row.paramName
         variables.model.projectParameterValue = props.row.paramValue

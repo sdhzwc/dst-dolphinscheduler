@@ -27,6 +27,7 @@ import {
   UpdateProjectParameterReq
 } from '@/service/modules/projects-parameter/types'
 import { useRouter } from 'vue-router'
+import {DEFAULT_DATA_TYPE} from "@/views/projects/parameter/data_type";
 
 export function useModal(
   props: any,
@@ -42,7 +43,7 @@ export function useModal(
       code: ref<number>(-1),
       projectParameterName: ref(''),
       projectParameterValue: ref(''),
-      projectParameterDataType: ref('VARCHAR')
+      projectParameterDataType: ref(DEFAULT_DATA_TYPE)
     },
     saving: false,
     rules: {
@@ -100,7 +101,7 @@ export function useModal(
     createProjectParameter(data, variables.projectCode).then(() => {
       variables.model.projectParameterName = ''
       variables.model.projectParameterValue = ''
-      variables.model.projectParameterDataType = 'VARCHAR'
+      variables.model.projectParameterDataType = DEFAULT_DATA_TYPE
       ctx.emit('confirmModal', props.showModalRef)
     })
   }

@@ -42,5 +42,13 @@ export const DATA_TYPES_MAP = {
     },
     BOOLEAN: {
         alias: 'BOOLEAN'
+    },
+    LIST: {
+        alias: 'LIST'
+    },
+    FILE: {
+        alias: 'FILE'
     }
 }
+
+export const DEFAULT_DATA_TYPE = 'VARCHAR'

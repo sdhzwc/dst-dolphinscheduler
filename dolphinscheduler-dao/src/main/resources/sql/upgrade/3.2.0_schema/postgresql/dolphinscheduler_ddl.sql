@@ -179,4 +179,5 @@ COMMENT ON COLUMN "t_ds_task_instance" ."process_instance_name" IS '';
 COMMENT ON COLUMN "t_ds_task_instance" ."executor_name" IS '';
 COMMENT ON COLUMN "t_ds_alert" ."sign" IS 'sign=sha1(content)';
 
-ALTER TABLE t_ds_project_parameter ADD  `param_data_type` varchar(50) DEFAULT 'VARCHAR' COMMENT 'project parameter data type';
+ALTER TABLE t_ds_project_parameter ADD COLUMN IF NOT EXISTS param_data_type varchar(50) DEFAULT 'VARCHAR';
+ALTER TABLE t_ds_project_parameter ADD COLUMN IF NOT EXISTS operator int;
