@@ -81,7 +81,7 @@ const ParameterModal = defineComponent({
         if (props.statusRef === 0) {
           variables.model.projectParameterName = ''
           variables.model.projectParameterValue = ''
-          variables.model.projectParameterDataType = ''
+          variables.model.projectParameterDataType = DEFAULT_DATA_TYPE
         } else {
           variables.model.code = props.row.code
           variables.model.projectParameterName = props.row.paramName
