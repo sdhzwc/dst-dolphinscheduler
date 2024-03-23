@@ -898,6 +898,8 @@ export default {
     name: 'Parameter Name',
     value: 'Parameter Value',
     data_type: 'Parameter Data Type',
+    create_user: 'Create User',
+    modify_user: 'Modify User',
     create_time: 'Create Time',
     update_time: 'Update Time',
     name_tips: 'Please enter your parameter name',

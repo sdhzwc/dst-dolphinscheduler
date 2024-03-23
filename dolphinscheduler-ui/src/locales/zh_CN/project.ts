@@ -872,6 +872,8 @@ export default {
     name: '参数名称',
     value: '参数值',
     data_type: '参数类型',
+    create_user: '创建用户',
+    modify_user: '修改用户',
     create_time: '创建时间',
     update_time: '更新时间',
     name_tips: '请输入参数名称',

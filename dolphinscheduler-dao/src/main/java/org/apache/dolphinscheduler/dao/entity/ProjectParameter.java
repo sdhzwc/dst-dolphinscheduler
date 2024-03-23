@@ -61,4 +61,10 @@ public class ProjectParameter {
     private Date createTime;
 
     private Date updateTime;
+
+    @TableField(exist = false)
+    private String createUser;
+
+    @TableField(exist = false)
+    private String modifyUser;
 }

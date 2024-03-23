@@ -51,11 +51,15 @@
 
     <select id="queryProjectParameterListPaging" resultType="org.apache.dolphinscheduler.dao.entity.ProjectParameter">
         select
-        <include refid="baseSql"/>
-        from t_ds_project_parameter
+        pp.id, param_name, param_value, param_data_type, code, project_code, user_id, operator, pp.create_time, pp.update_time,
+        u.user_name as create_user,
+        u2.user_name as modify_user
+        from t_ds_project_parameter pp
+        left join t_ds_user u on pp.user_id = u.id
+        left join t_ds_user u2 on pp.operator = u2.id
         where project_code = #{projectCode}
         <if test="projectParameterIds != null and projectParameterIds.size() > 0">
-            and id  in
+            and pp.id  in
             <foreach item="id" index="index" collection="projectParameterIds" open="(" separator="," close=")">
                 #{id}
             </foreach>
@@ -68,7 +72,7 @@
         <if test="paramDataType!=null and paramDataType != ''">
             AND param_data_type = #{paramDataType}
         </if>
-        order by update_time desc
+        order by pp.update_time desc
     </select>
 
     <select id="queryByProjectCode" resultType="org.apache.dolphinscheduler.dao.entity.ProjectParameter">
