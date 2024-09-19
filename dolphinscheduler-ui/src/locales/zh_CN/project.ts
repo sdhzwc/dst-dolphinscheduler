@@ -230,6 +230,7 @@ export default {
     want_to_set_timing: '现在想去配置该工作流定时?',
     confirm_to_online: '是否确定上线该工作流?',
     confirm_to_offline: '是否确定下线该工作流?',
+    wait_to_run: '等待执行',
   },
   task: {
     on_line: '线上',
