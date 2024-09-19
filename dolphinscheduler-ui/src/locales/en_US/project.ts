@@ -232,6 +232,7 @@ export default {
     want_to_set_timing: 'Would you like to set the workflow timing?',
     confirm_to_online: 'Confirm to make the workflow online?',
     confirm_to_offline: 'Confirm to make the workflow offline?',
+    wait_to_run: 'WAIT_TO_RUN',
   },
   task: {
     on_line: 'Online',
