@@ -17,5 +17,6 @@
 
 export default {
   cancel: 'Cancel',
-  confirm: 'Confirm'
+  confirm: 'Confirm',
+  expand_editor: 'Expand editor'
 }

@@ -23,6 +23,7 @@ import {
   ref,
   watch
 } from 'vue'
+import { NButton, NCard, NIcon, NModal, NTooltip } from 'naive-ui'
 import { useFormItem } from 'naive-ui/es/_mixins'
 import { call } from 'naive-ui/es/_utils'
 import { useThemeStore } from '@/store/theme/theme'
@@ -38,6 +39,8 @@ import type {
   OnUpdateValueImpl,
   monaco as Monaco
 } from './types'
+import { useI18n } from 'vue-i18n'
+import { ArrowsAltOutlined } from '@vicons/antd'
 
 const props = {
   value: {
@@ -55,6 +58,14 @@ const props = {
       readOnly: false,
       language: 'shell'
     })
+  },
+  height: {
+    type: String as PropType<string>,
+    default: '300px'
+  },
+  showFullscreen: {
+    type: Boolean as PropType<boolean>,
+    default: true
   }
 }
 
@@ -77,17 +88,30 @@ window.MonacoEnvironment = {
   }
 }
 
-export default defineComponent({
+const MonacoEditor = defineComponent({
   name: 'MonacoEditor',
   props,
   emits: ['change', 'focus', 'blur'],
   setup(props, ctx) {
     let editor = null as monaco.editor.IStandaloneCodeEditor | null
     const themeStore = useThemeStore()
+    const { t } = useI18n()
     const monacoEditorThemeRef = ref(themeStore.darkTheme ? 'vs-dark' : 'vs')
     const editorRef = ref()
+    const fullscreenVisible = ref(false)
     const getValue = () => editor?.getValue()
     const formItem = useFormItem({})
+
+    const updateValue = (value: string) => {
+      const { onUpdateValue, 'onUpdate:value': _onUpdateValue } = props
+
+      if (onUpdateValue) call(onUpdateValue as OnUpdateValueImpl, value)
+      if (_onUpdateValue) call(_onUpdateValue as OnUpdateValueImpl, value)
+      ctx.emit('change', value)
+
+      formItem.nTriggerFormChange()
+      formItem.nTriggerFormInput()
+    }
 
     const initMonacoEditor = () => {
       const dom = editorRef.value
@@ -103,15 +127,8 @@ export default defineComponent({
           }
         })
         editor.onDidChangeModelContent(() => {
-          const { onUpdateValue, 'onUpdate:value': _onUpdateValue } = props
           const value = editor?.getValue() || ''
-
-          if (onUpdateValue) call(onUpdateValue as OnUpdateValueImpl, value)
-          if (_onUpdateValue) call(_onUpdateValue as OnUpdateValueImpl, value)
-          ctx.emit('change', value)
-
-          formItem.nTriggerFormChange()
-          formItem.nTriggerFormInput()
+          updateValue(value)
         })
         editor.onDidBlurEditorWidget(() => {
           ctx.emit('blur')
@@ -157,18 +174,84 @@ export default defineComponent({
 
     ctx.expose({ getValue })
 
-    return { editorRef }
+    return {
+      editorRef,
+      fullscreenVisible,
+      t,
+      updateValue
+    }
   },
   render() {
     return (
-      <div
-        ref='editorRef'
-        style={{
-          height: '300px',
-          width: '100%',
-          border: '1px solid #eee'
-        }}
-      />
+      <div style={{ position: 'relative', width: '100%' }}>
+        {this.showFullscreen && (
+          <NTooltip trigger='hover'>
+            {{
+              trigger: () => (
+                <NButton
+                  quaternary
+                  circle
+                  size='small'
+                  aria-label={this.t('modal.expand_editor')}
+                  style={{
+                    position: 'absolute',
+                    top: '8px',
+                    right: '8px',
+                    zIndex: 1
+                  }}
+                  onClick={() => (this.fullscreenVisible = true)}
+                >
+                  {{
+                    icon: () => (
+                      <NIcon>
+                        <ArrowsAltOutlined />
+                      </NIcon>
+                    )
+                  }}
+                </NButton>
+              ),
+              default: () => this.t('modal.expand_editor')
+            }}
+          </NTooltip>
+        )}
+        <div
+          ref='editorRef'
+          style={{
+            height: this.height,
+            minHeight: '150px',
+            width: '100%',
+            border: '1px solid #eee'
+          }}
+        />
+        {this.showFullscreen && (
+          <NModal
+            v-model={[this.fullscreenVisible, 'show']}
+            display-directive='show'
+            auto-focus={false}
+          >
+            <NCard
+              title={this.t('modal.expand_editor')}
+              closable
+              onClose={() => (this.fullscreenVisible = false)}
+              style={{
+                width: '90vw',
+                maxWidth: '1280px'
+              }}
+              contentStyle={{ padding: '0' }}
+            >
+              <MonacoEditor
+                value={this.value}
+                options={this.options}
+                height='calc(90vh - 120px)'
+                showFullscreen={false}
+                onUpdateValue={this.updateValue}
+              />
+            </NCard>
+          </NModal>
+        )}
+      </div>
     )
   }
 })
+
+export default MonacoEditor

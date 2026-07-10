@@ -17,5 +17,6 @@
 
 export default {
   cancel: '取消',
-  confirm: '确定'
+  confirm: '确定',
+  expand_editor: '放大编辑'
 }
